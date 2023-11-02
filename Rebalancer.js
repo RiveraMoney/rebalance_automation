@@ -149,6 +149,8 @@ class Rebalancer {
 
     const secret = response.SecretString;
     console.log("secret", secret);
+    this.harvester_private_key = secret.privatekey_testnet;
+    this.signer = new ethers.Wallet(this.harvester_private_key, this.provider);
   }
 
   async getDecimals(token) {
