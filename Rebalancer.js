@@ -35,6 +35,12 @@ class Rebalancer {
   }
 
   async rebalanceAllVaults() {
+    // if (!process.env.HARVESTER_PRIVATE_KEY) {
+    //   throw new Error(
+    //     "Variables required for the Auto compounding service run is not set up in the .env file"
+    //   );
+    // }
+
     console.log(`Starting query of Vault addresses from blockchian storage.`);
     const vaultAdresses = await this.riveraFactory.listAllVaults();
     if (vaultAdresses.length == 0) {
@@ -73,35 +79,23 @@ class Rebalancer {
         const tickAverage = (tickLower + tickUpper) / 2;
         const safeTickLower = tickAverage - 953;
         const safeTickUpper = tickAverage + 953;
-        console.log("tickLower", tickLower);
-        console.log("tickUpper", tickUpper);
-        console.log("currentTick", currentTick);
-        console.log("tickSpacing", tickSpacing);
-        console.log("tickAverage", tickAverage);
-        console.log("safeTickLower", safeTickLower);
-        console.log("safeTickUpper", safeTickUpper);
-        console.log("symbol", symbol[symbol.length - 1]);
 
         if (currentTick > safeTickLower && currentTick < safeTickUpper) {
           console.log("Ticks Are In Safe Range");
         } else {
           let newTickLower = currentTick - 23027;
           let newTickUpper = currentTick + 23027;
-          console.log("newTickLower", newTickLower);
-          console.log("newTickUpper", newTickUpper);
           if (newTickLower % tickSpacing != 0) {
             newTickLower = await this.roundToMultiple(
               newTickLower,
               tickSpacing
             );
-            console.log("newTickLower arranged", newTickLower);
           }
           if (newTickUpper % tickSpacing != 0) {
             newTickUpper = await this.roundToMultiple(
               newTickUpper,
               tickSpacing
             );
-            console.log("newTickUpper arranged", newTickUpper);
           }
           const txResponse = await strategyContract.changeRange(
             newTickLower,
@@ -118,6 +112,8 @@ class Rebalancer {
       }
     }
   }
+
+  async getHarvestorKey() {}
 
   async getDecimals(token) {
     const tokenContract = new ethers.Contract(token, erc20Abi, this.signer);
