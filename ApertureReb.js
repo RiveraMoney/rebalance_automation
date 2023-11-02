@@ -12,10 +12,10 @@ import * as dotenv from "dotenv";
 dotenv.config();
 async function autoCompound() {
   const riveraFactory = "0xBBb6aD1765216D907dD704c775816bE365C01e21"; //fusionx vault factory
-  const rpcURL = "http://localhost:8545";
-  // const rpcURL = "https://pacific-rpc.manta.network/http";
+  // const rpcURL = "http://localhost:8545";
+  const rpcURL = "https://pacific-rpc.manta.network/http";
   // const timeOut = 28800000;
-  const timeOut = 15000;
+  const timeOut = 600000;
   //fetch secret
   let harvester_private_key;
   if (!process.env.HARVESTER_PRIVATE_KEY) {
