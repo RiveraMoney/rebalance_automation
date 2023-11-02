@@ -1,6 +1,4 @@
 import * as ethers from "ethers";
-import * as dotenv from "dotenv";
-dotenv.config();
 
 import {
   riveraFactoryAbi,
@@ -10,11 +8,6 @@ import {
   stakeAbi,
 } from "./abis/abi.js";
 
-import {
-  SecretsManagerClient,
-  GetSecretValueCommand,
-} from "@aws-sdk/client-secrets-manager";
-
 class Rebalancer {
   BLOCKCHAIN_JSON_RPC_URL;
   riveraFactory;
@@ -22,16 +15,15 @@ class Rebalancer {
   provider;
   signer;
 
-  constructor(_BLOCKCHAIN_JSON_RPC_URL, _riveraFactory) {
-    // if (!process.env.HARVESTER_PRIVATE_KEY) {
-    //   throw new Error(
-    //     "Variables required for the Auto compounding service run is not set up in the .env file"
-    //   );
-    // }
+  constructor(
+    _BLOCKCHAIN_JSON_RPC_URL,
+    _riveraFactory,
+    _harvester_private_key
+  ) {
     this.BLOCKCHAIN_JSON_RPC_URL = _BLOCKCHAIN_JSON_RPC_URL;
-    // this.harvester_private_key = process.env.HARVESTER_PRIVATE_KEY;
+    this.harvester_private_key = _harvester_private_key;
     this.provider = new ethers.JsonRpcProvider(this.BLOCKCHAIN_JSON_RPC_URL);
-    // this.signer = new ethers.Wallet(this.harvester_private_key, this.provider);
+    this.signer = new ethers.Wallet(this.harvester_private_key, this.provider);
     this.riveraFactory = new ethers.Contract(
       _riveraFactory,
       riveraFactoryAbi,
@@ -40,19 +32,6 @@ class Rebalancer {
   }
 
   async rebalanceAllVaults() {
-    if (!process.env.HARVESTER_PRIVATE_KEY) {
-      // throw new Error(
-      //   "Variables required for the Auto compounding service run is not set up in the .env file"
-      // );
-      await this.getHarvestorKey();
-    } else {
-      this.harvester_private_key = process.env.HARVESTER_PRIVATE_KEY;
-      this.signer = new ethers.Wallet(
-        this.harvester_private_key,
-        this.provider
-      );
-    }
-
     console.log(`Starting query of Vault addresses from blockchian storage.`);
     const vaultAdresses = await this.riveraFactory.listAllVaults();
     if (vaultAdresses.length == 0) {
@@ -123,34 +102,6 @@ class Rebalancer {
         console.log("==============================================");
       }
     }
-  }
-
-  async getHarvestorKey() {
-    const secret_name = "privatekey_testnet";
-
-    const client = new SecretsManagerClient({
-      region: "us-east-1",
-    });
-
-    let response;
-
-    try {
-      response = await client.send(
-        new GetSecretValueCommand({
-          SecretId: secret_name,
-          VersionStage: "AWSCURRENT", // VersionStage defaults to AWSCURRENT if unspecified
-        })
-      );
-    } catch (error) {
-      // For a list of exceptions thrown, see
-      // https://docs.aws.amazon.com/secretsmanager/latest/apireference/API_GetSecretValue.html
-      throw error;
-    }
-
-    const secret = response.SecretString;
-    console.log("secret", secret);
-    this.harvester_private_key = secret.privatekey_testnet;
-    this.signer = new ethers.Wallet(this.harvester_private_key, this.provider);
   }
 
   async getDecimals(token) {
