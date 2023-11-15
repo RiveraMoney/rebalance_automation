@@ -68,14 +68,20 @@ class Rebalancer {
         const currentTick = Number((await stakeContract.slot0()).tick);
         const tickSpacing = Number(await strategyContract.poolFee()) / 50;
         const tickAverage = (tickLower + tickUpper) / 2;
-        const safeTickLower = tickAverage - 953;
-        const safeTickUpper = tickAverage + 953;
+        const safeTickLower = tickAverage - 770;
+        const safeTickUpper = tickAverage + 770;
+        // console.log("tickUpper", tickLower);
+        // console.log("tickUpper", tickUpper);
+        // console.log("currentTick", currentTick);
+        // console.log("tickAverage", tickAverage);
+        // console.log("safeTickLower", safeTickLower);
+        // console.log("safeTickUpper", safeTickUpper);
 
         if (currentTick > safeTickLower && currentTick < safeTickUpper) {
           console.log("Ticks Are In Safe Range");
         } else {
-          let newTickLower = currentTick - 23027;
-          let newTickUpper = currentTick + 23027;
+          let newTickLower = currentTick - 6932;
+          let newTickUpper = currentTick + 6932;
           if (newTickLower % tickSpacing != 0) {
             newTickLower = await this.roundToMultiple(
               newTickLower,
@@ -88,6 +94,9 @@ class Rebalancer {
               tickSpacing
             );
           }
+          // console.log("newTickLower", newTickLower);
+          // console.log("newTickUpper", newTickUpper);
+
           const txResponse = await strategyContract.changeRange(
             newTickLower,
             newTickUpper
