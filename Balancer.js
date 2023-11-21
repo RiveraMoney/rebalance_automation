@@ -17,77 +17,87 @@ class Balancer {
   }
 
   async rebalanceAllVaults() {
-    for (let index = 0; index < vaults.length; index++) {
-      const element = vaults[index];
-      const vault = element.vault;
-      console.log("=========vault=================");
-      console.log(vault);
-      const provider = new ethers.JsonRpcProvider(element.rpc.trim());
-      const signer = new ethers.Wallet(this.harvester_private_key, provider);
-      // console.log("signer", signer);
-      const currentVaultContract = new ethers.Contract(
-        vault,
-        vaultAbi,
-        provider
-      ); //Vault contract is changed to the current one in thsi line in every loop and run
-      // console.log("currentVaultContract", currentVaultContract);
-      const strategyContract = new ethers.Contract(
-        await currentVaultContract.strategy(),
-        stratAbi,
-        signer
-      );
-      // console.log("strategyContract", strategyContract);
-      const stakeContract = new ethers.Contract(
-        await strategyContract.stake(),
-        stakeAbi,
-        signer
-      );
-      const symbol = await currentVaultContract.symbol();
-      if (
-        symbol[symbol.length - 1] == "Z" ||
-        symbol[symbol.length - 1] == "z"
-      ) {
-        continue;
-      }
-      const tickLower = Number(await strategyContract.tickLower());
-      const tickUpper = Number(await strategyContract.tickUpper());
-      const currentTick = Number((await stakeContract.slot0()).tick);
-      const tickSpacing = Number(await strategyContract.poolFee()) / 50;
-      const tickAverage = (tickLower + tickUpper) / 2;
-      const safeTickLower = tickAverage - element.logt_d;
-      const safeTickUpper = tickAverage + element.logt_u;
-      console.log("tickUpper", tickLower);
-      console.log("tickUpper", tickUpper);
-      console.log("currentTick", currentTick);
-      console.log("tickAverage", tickAverage);
-      console.log("safeTickLower", safeTickLower);
-      console.log("safeTickUpper", safeTickUpper);
-      if (currentTick > safeTickLower && currentTick < safeTickUpper) {
-        console.log("Ticks Are In Safe Range");
-      } else {
-        let newTickLower = currentTick - element.logr_d;
-        let newTickUpper = currentTick + element.logr_u;
-        if (newTickLower % tickSpacing != 0) {
-          newTickLower = await this.roundToMultiple(newTickLower, tickSpacing);
+    try {
+      for (let index = 0; index < vaults.length; index++) {
+        const element = vaults[index];
+        const vault = element.vault;
+        console.log("=========vault=================");
+        console.log(vault);
+        const provider = new ethers.JsonRpcProvider(element.rpc.trim());
+        const signer = new ethers.Wallet(this.harvester_private_key, provider);
+        // console.log("signer", signer);
+        const currentVaultContract = new ethers.Contract(
+          vault,
+          vaultAbi,
+          provider
+        ); //Vault contract is changed to the current one in thsi line in every loop and run
+        // console.log("currentVaultContract", currentVaultContract);
+        const strategyContract = new ethers.Contract(
+          await currentVaultContract.strategy(),
+          stratAbi,
+          signer
+        );
+        // console.log("strategyContract", strategyContract);
+        const stakeContract = new ethers.Contract(
+          await strategyContract.stake(),
+          stakeAbi,
+          signer
+        );
+        const symbol = await currentVaultContract.symbol();
+        if (
+          symbol[symbol.length - 1] == "Z" ||
+          symbol[symbol.length - 1] == "z"
+        ) {
+          continue;
         }
-        if (newTickUpper % tickSpacing != 0) {
-          newTickUpper = await this.roundToMultiple(newTickUpper, tickSpacing);
-        }
-        console.log("newTickLower", newTickLower);
-        console.log("newTickUpper", newTickUpper);
+        const tickLower = Number(await strategyContract.tickLower());
+        const tickUpper = Number(await strategyContract.tickUpper());
+        const currentTick = Number((await stakeContract.slot0()).tick);
+        const tickSpacing = Number(await strategyContract.poolFee()) / 50;
+        const tickAverage = (tickLower + tickUpper) / 2;
+        const safeTickLower = tickAverage - element.logt_d;
+        const safeTickUpper = tickAverage + element.logt_u;
+        console.log("tickLower", tickLower);
+        console.log("tickUpper", tickUpper);
+        console.log("currentTick", currentTick);
+        console.log("tickAverage", tickAverage);
+        console.log("safeTickLower", safeTickLower);
+        console.log("safeTickUpper", safeTickUpper);
+        if (currentTick > safeTickLower && currentTick < safeTickUpper) {
+          console.log("Ticks Are In Safe Range");
+        } else {
+          let newTickLower = currentTick - element.logr_d;
+          let newTickUpper = currentTick + element.logr_u;
+          if (newTickLower % tickSpacing != 0) {
+            newTickLower = await this.roundToMultiple(
+              newTickLower,
+              tickSpacing
+            );
+          }
+          if (newTickUpper % tickSpacing != 0) {
+            newTickUpper = await this.roundToMultiple(
+              newTickUpper,
+              tickSpacing
+            );
+          }
+          console.log("newTickLower", newTickLower);
+          console.log("newTickUpper", newTickUpper);
 
-        const txResponse = await strategyContract.changeRange(
-          newTickLower,
-          newTickUpper
-        );
-        const txReceipt = await txResponse.wait();
-        console.log(
-          `Actual gas spent of the current transaction: ${Number(
-            txReceipt.gasUsed
-          )}`
-        );
+          const txResponse = await strategyContract.changeRange(
+            newTickLower,
+            newTickUpper
+          );
+          const txReceipt = await txResponse.wait();
+          console.log(
+            `Actual gas spent of the current transaction: ${Number(
+              txReceipt.gasUsed
+            )}`
+          );
+        }
+        console.log("==============================================");
       }
-      console.log("==============================================");
+    } catch (error) {
+      console.log("error Happend", error);
     }
   }
 
