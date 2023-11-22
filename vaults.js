@@ -1,7 +1,7 @@
 const vaults = [
   {
     vault: "0xfa944c1996efBF9FbFF1a378903F4AD82C172D72",
-    rpc: "http://localhost:8545",
+    rpc: "https://rpc.mantle.xyz/",
     chain: "mantle",
     dex: "fusionx",
     logr_u: 6932,
@@ -11,7 +11,7 @@ const vaults = [
   },
   {
     vault: "0x945438ef559EFf400429DFb101e57a6299B5ceE2",
-    rpc: "http://localhost:8545",
+    rpc: "https://rpc.mantle.xyz/",
     chain: "mantle",
     dex: "fusionx",
     logr_u: 6932,
@@ -21,7 +21,7 @@ const vaults = [
   },
   {
     vault: "0xA25d1843eedE1E1D0631b979da605606412e64f7",
-    rpc: "http://localhost:8545",
+    rpc: "https://rpc.mantle.xyz/",
     chain: "mantle",
     dex: "fusionx",
     logr_u: 6932,
@@ -31,7 +31,7 @@ const vaults = [
   },
   {
     vault: "0xAa81F912D09Fd313Bbc1d5638632aB6bf59aB495",
-    rpc: "http://localhost:8545",
+    rpc: "https://rpc.mantle.xyz/",
     chain: "mantle",
     dex: "fusionx",
     logr_u: 6932,
@@ -41,7 +41,7 @@ const vaults = [
   },
   {
     vault: "0xCbb95e8a63cd37D09c2948A22c12632469fb0BC7",
-    rpc: "http://localhost:8545",
+    rpc: "https://rpc.mantle.xyz/",
     chain: "mantle",
     dex: "fusionx",
     logr_u: 5306,
@@ -51,7 +51,7 @@ const vaults = [
   },
   {
     vault: "0x0DB2BA00bCcf4F5e20b950bF954CAdF768D158Aa",
-    rpc: "http://localhost:8545",
+    rpc: "https://rpc.mantle.xyz/",
     chain: "mantle",
     dex: "agni",
     logr_u: 6932,
@@ -61,7 +61,7 @@ const vaults = [
   },
   {
     vault: "0x713C1300f82009162cC908dC9D82304A51F05A3E",
-    rpc: "http://localhost:8545",
+    rpc: "https://rpc.mantle.xyz/",
     chain: "mantle",
     dex: "agni",
     logr_u: 6932,
@@ -71,7 +71,7 @@ const vaults = [
   },
   {
     vault: "0xDc63179CC57783493DD8a4Ffd7367DF489Ae93BF",
-    rpc: "http://localhost:8545",
+    rpc: "https://rpc.mantle.xyz/",
     chain: "mantle",
     dex: "agni",
     logr_u: 6932,
@@ -81,7 +81,7 @@ const vaults = [
   },
   {
     vault: "0x5f247B216E46fD86A09dfAB377d9DBe62E9dECDA",
-    rpc: "http://localhost:8545",
+    rpc: "https://rpc.mantle.xyz/",
     chain: "mantle",
     dex: "agni",
     logr_u: 6932,
@@ -91,7 +91,7 @@ const vaults = [
   },
   {
     vault: "0x907a942ce79ca4Cf063d2e987024dc9E88C5ac98",
-    rpc: "http://localhost:8545",
+    rpc: "https://rpc.mantle.xyz/",
     chain: "mantle",
     dex: "agni",
     logr_u: 5306,
@@ -101,7 +101,7 @@ const vaults = [
   },
   {
     vault: "0x713C1300f82009162cC908dC9D82304A51F05A3E",
-    rpc: "http://localhost:3000",
+    rpc: "https://pacific-rpc.manta.network/http",
     chain: "manta",
     dex: "apertureswap",
     logr_u: 6932,
@@ -111,7 +111,7 @@ const vaults = [
   },
   {
     vault: "0x0DB2BA00bCcf4F5e20b950bF954CAdF768D158Aa",
-    rpc: "http://localhost:3000",
+    rpc: "https://pacific-rpc.manta.network/http",
     chain: "manta",
     dex: "apertureswap",
     logr_u: 6932,
@@ -121,7 +121,7 @@ const vaults = [
   },
   {
     vault: "0xDc63179CC57783493DD8a4Ffd7367DF489Ae93BF",
-    rpc: "http://localhost:3000",
+    rpc: "https://pacific-rpc.manta.network/http",
     chain: "manta",
     dex: "apertureswap",
     logr_u: 6932,
@@ -131,7 +131,7 @@ const vaults = [
   },
   {
     vault: "0x5f247B216E46fD86A09dfAB377d9DBe62E9dECDA",
-    rpc: "http://localhost:3000",
+    rpc: "https://pacific-rpc.manta.network/http",
     chain: "manta",
     dex: "apertureswap",
     logr_u: 6932,
@@ -141,7 +141,7 @@ const vaults = [
   },
   {
     vault: "0x45C3BB1a0f0827bF03C089842334B861474e7714",
-    rpc: "http://localhost:3000",
+    rpc: "https://pacific-rpc.manta.network/http",
     chain: "manta",
     dex: "apertureswap",
     logr_u: 5306,
@@ -151,7 +151,7 @@ const vaults = [
   },
   {
     vault: "0x241d09eC72809C4C390BC81b81dEF4d1E0e88626",
-    rpc: "http://localhost:3000",
+    rpc: "https://pacific-rpc.manta.network/http",
     chain: "manta",
     dex: "apertureswap",
     logr_u: 5306,
