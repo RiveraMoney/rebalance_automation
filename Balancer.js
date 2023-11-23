@@ -15,6 +15,10 @@ class Balancer {
       const vault = element.vault;
       console.log("=========vault=================");
       console.log(vault);
+      if (element.rebal == false) {
+        // console.log("=========VAULT  SKIPPED=================");
+        continue;
+      }
       const provider = new ethers.JsonRpcProvider(element.rpc.trim());
       const signer = new ethers.Wallet(this.harvester_private_key, provider);
       // console.log("signer", signer);
@@ -36,12 +40,12 @@ class Balancer {
         signer
       );
       const symbol = await currentVaultContract.symbol();
-      if (
-        symbol[symbol.length - 1] == "Z" ||
-        symbol[symbol.length - 1] == "z"
-      ) {
-        continue;
-      }
+      // if (
+      //   symbol[symbol.length - 1] == "Z" ||
+      //   symbol[symbol.length - 1] == "z"
+      // ) {
+      //   continue;
+      // }
       const tickLower = Number(await strategyContract.tickLower());
       const tickUpper = Number(await strategyContract.tickUpper());
       const currentTick = Number((await stakeContract.slot0()).tick);
