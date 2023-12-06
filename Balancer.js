@@ -1,5 +1,11 @@
 import * as ethers from "ethers";
-import { stratAbi, vaultAbi, erc20Abi, stakeAbi } from "./abis/abi.js";
+import {
+  stratAbi,
+  vaultAbi,
+  erc20Abi,
+  stakeAbi,
+  stakeAlgebraAbi,
+} from "./abis/abi.js";
 import { vaults } from "./vaults.js";
 
 class Balancer {
@@ -21,25 +27,22 @@ class Balancer {
       }
       const provider = new ethers.JsonRpcProvider(element.rpc.trim());
       const signer = new ethers.Wallet(this.harvester_private_key, provider);
-      // console.log("signer", signer);
       const currentVaultContract = new ethers.Contract(
         vault,
         vaultAbi,
         provider
       ); //Vault contract is changed to the current one in thsi line in every loop and run
-      // console.log("currentVaultContract", currentVaultContract);
       const strategyContract = new ethers.Contract(
         await currentVaultContract.strategy(),
         stratAbi,
         signer
       );
-      // console.log("strategyContract", strategyContract);
       const stakeContract = new ethers.Contract(
         await strategyContract.stake(),
-        stakeAbi,
+        element.type == "algebra" ? stakeAlgebraAbi : stakeAbi,
         signer
       );
-      const symbol = await currentVaultContract.symbol();
+      // const symbol = await currentVaultContract.symbol();
       // if (
       //   symbol[symbol.length - 1] == "Z" ||
       //   symbol[symbol.length - 1] == "z"
@@ -48,8 +51,17 @@ class Balancer {
       // }
       const tickLower = Number(await strategyContract.tickLower());
       const tickUpper = Number(await strategyContract.tickUpper());
-      const currentTick = Number((await stakeContract.slot0()).tick);
-      const tickSpacing = Number(await strategyContract.poolFee()) / 50;
+      let tickSpacing;
+      let currentTick;
+
+      if (element.type == "algebra") {
+        currentTick = Number((await stakeContract.globalState()).tick);
+        tickSpacing = Number(await stakeContract.tickSpacing());
+      } else {
+        currentTick = Number((await stakeContract.slot0()).tick);
+        tickSpacing = Number(await strategyContract.poolFee()) / 50;
+      }
+
       const tickAverage = tickUpper - element.logr_u;
       // const tickAverage = (tickLower + tickUpper) / 2;
       const safeTickLower = tickAverage - element.logt_d;
@@ -74,7 +86,6 @@ class Balancer {
         }
         // console.log("newTickLower", newTickLower);
         // console.log("newTickUpper", newTickUpper);
-
         const txResponse = await strategyContract.changeRange(
           newTickLower,
           newTickUpper
@@ -102,21 +113,3 @@ class Balancer {
 }
 
 export { Balancer };
-
-/*
-[
-{
-vault:"0xfa944c1996efBF9FbFF1a378903F4AD82C172D72"
-rpc:"http://localhost:8545",
-},
-{
-vault:"0x945438ef559EFf400429DFb101e57a6299B5ceE2"
-rpc:"http://localhost:8545",
-},
-{
-vault:"0xA25d1843eedE1E1D0631b979da605606412e64f7"
-rpc:"http://localhost:8545",
-},
-]
-
-*/
