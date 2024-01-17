@@ -177,7 +177,7 @@ const vaults = [
     logr_d: 1625,
     logt_u: 630,
     logt_d: 630,
-    rebal: false,
+    rebal: true,
     type: "usV3",
   },
   {
@@ -189,7 +189,7 @@ const vaults = [
     logr_d: 1625,
     logt_u: 630,
     logt_d: 630,
-    rebal: false,
+    rebal: true,
     type: "usV3",
   },
   //telos
