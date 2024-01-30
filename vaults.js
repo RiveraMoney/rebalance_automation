@@ -8,7 +8,7 @@ const vaults = [
     logr_d: 6932,
     logt_u: 770,
     logt_d: 770,
-    rebal: true,
+    rebal: false,
     type: "usV3",
   },
   {
@@ -20,7 +20,7 @@ const vaults = [
     logr_d: 6932,
     logt_u: 770,
     logt_d: 770,
-    rebal: true,
+    rebal: false,
     type: "usV3",
   },
   {
@@ -32,7 +32,7 @@ const vaults = [
     logr_d: 6932,
     logt_u: 770,
     logt_d: 770,
-    rebal: true,
+    rebal: false,
     type: "usV3",
   },
   {
@@ -56,7 +56,7 @@ const vaults = [
     logr_d: 5306,
     logt_u: 630,
     logt_d: 630,
-    rebal: true,
+    rebal: false,
     type: "usV3",
   },
   {
