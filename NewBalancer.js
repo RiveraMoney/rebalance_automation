@@ -20,6 +20,10 @@ class Balancer {
     async rebalanceAllVaults() {
         let response = await fetch(apiUrl);
         let vaults = await response.json();
+        // console.log("vaults",vaults);
+        // vaults=await this.getVaultsForTesting(vaults);
+        // console.log("vaultsTemp",vaults);
+        
         for (let index = 0; index < vaults.length; index++) {
             const element = vaults[index];
             const vault = element.vaultAddress;
@@ -114,6 +118,25 @@ class Balancer {
     async roundToMultiple(number, multiple) {
         return Math.round(number / multiple) * multiple;
     }
+
+    // async getVaultsForTesting(vaultsMain){
+    //     let vaultsTemp;
+    //     vaultsTemp= vaultsMain.filter((element)=>{
+    //         if(element.rebalance==true){
+    //             if(element.chainRPC.trim()=='https://mainnet.telos.net/evm'){
+    //                 element.chainRPC="http://127.0.0.1:8000/";
+    //             }
+    //             if(element.chainRPC.trim()=='https://rpc.mantle.xyz/'){
+    //                 element.chainRPC="http://127.0.0.1:8545/";
+    //             }
+    //             if(element.chainRPC.trim()=='https://pacific-rpc.manta.network/http'){
+    //                 element.chainRPC="http://127.0.0.1:3000/";
+    //             }
+    //             return element;
+    //         }
+    //     })
+    //     return vaultsTemp;
+    // }
 }
 
 export { Balancer };

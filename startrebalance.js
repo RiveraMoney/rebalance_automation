@@ -1,4 +1,4 @@
-import { Balancer } from "./Balancer.js";
+import { Balancer } from "./NewBalancer.js";
 (function () {
   return moment().tz("Asia/Kolkata").format() + " ";
 });
