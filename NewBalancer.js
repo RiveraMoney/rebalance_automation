@@ -96,7 +96,9 @@ class Balancer {
                 // console.log("newTickUpper", newTickUpper);
                 const txResponse = await strategyContract.changeRange(
                     newTickLower,
-                    newTickUpper
+                    newTickUpper,{
+                    gasLimit: 2000000
+                }
                 );
                 const txReceipt = await txResponse.wait();
                 console.log(
