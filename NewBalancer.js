@@ -23,7 +23,7 @@ class Balancer {
         // console.log("vaults",vaults);
         // vaults=await this.getVaultsForTesting(vaults);
         // console.log("vaultsTemp",vaults);
-        
+
         for (let index = 0; index < vaults.length; index++) {
             const element = vaults[index];
             const vault = element.vaultAddress;
@@ -94,10 +94,18 @@ class Balancer {
                 }
                 // console.log("newTickLower", newTickLower);
                 // console.log("newTickUpper", newTickUpper);
+                const gasEs = await strategyContract.changeRange.estimateGas(
+                    newTickLower,
+                    newTickUpper
+                );
+                const gasPrice = (await provider.getFeeData()).gasPrice;
+                // console.log("gas price is", gasPrice.toString())
+                // console.log("gas", gasEs.toString());
                 const txResponse = await strategyContract.changeRange(
                     newTickLower,
-                    newTickUpper,{
-                    gasLimit: 2000000
+                    newTickUpper, {
+                    gasPrice: gasPrice,
+                    gasLimit: gasEs
                 }
                 );
                 const txReceipt = await txResponse.wait();
